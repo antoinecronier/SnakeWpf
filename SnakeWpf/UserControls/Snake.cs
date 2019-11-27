@@ -23,7 +23,7 @@ namespace SnakeWpf.UserControls
             SnakeTileUC baseTile = new SnakeTileUC(this.mainGrid);
             baseTile.MoveTo(this.mainGrid.RowDefinitions.Count / 2, this.mainGrid.ColumnDefinitions.Count / 2);
 
-            for (int i = 1; i < 5; i++)
+            for (int i = 1; i < 7; i++)
             {
                 SnakeTileUC uc = new SnakeTileUC(this.mainGrid);
                 uc.MoveTo(baseTile.Row + i, baseTile.Column);
@@ -105,6 +105,39 @@ namespace SnakeWpf.UserControls
 
                 lastRow = nextRow;
                 lastColumn = nextColumn;
+            }
+
+            this.CheckDeath();
+        }
+
+        private void CheckDeath()
+        {
+            for (int i = 0; i < this.Tiles.Count; i++)
+            {
+                for (int j = 0; j < this.Tiles.Count; j++)
+                {
+                    if (this.Tiles.ElementAt(i) != this.Tiles.ElementAt(j))
+                    {
+                        if (this.Tiles.ElementAt(i).Row == this.Tiles.ElementAt(j).Row
+                            &&
+                            this.Tiles.ElementAt(i).Column == this.Tiles.ElementAt(j).Column)
+                        {
+                            OnSnakeDeath(new EventArgs());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        public event EventHandler SnakeDeath;
+
+        protected virtual void OnSnakeDeath(EventArgs e)
+        {
+            EventHandler handler = SnakeDeath;
+            if (handler != null)
+            {
+                handler(this, e);
             }
         }
     }

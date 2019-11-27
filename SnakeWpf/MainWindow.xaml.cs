@@ -138,6 +138,12 @@ namespace SnakeWpf
             }
 
             snake = new Snake(this.MainGrid);
+            snake.SnakeDeath += Snake_SnakeDeath;
+        }
+
+        private void Snake_SnakeDeath(object sender, EventArgs e)
+        {
+            Console.WriteLine("SnakeDeath " + DateTime.Now);
         }
     }
 }
