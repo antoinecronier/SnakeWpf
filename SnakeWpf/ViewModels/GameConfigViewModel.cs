@@ -1,4 +1,5 @@
 ﻿using SnakeWpf.ViewModels.Base;
+using SnakeWpf.ViewModels.ICommands;
 using SnakeWpf.Views;
 using SnakeWpfClassLibrary.Entities;
 using System;
@@ -12,6 +13,8 @@ namespace SnakeWpf.ViewModels
     public class GameConfigViewModel : BaseViewModel<GameConfigPage>
     {
         public GameConfig GameConfig { get; set; }
+
+        public StartGameCommand StartGame { get; set; }
 
         public GameConfigViewModel(GameConfigPage gameconfigpage)
         {
@@ -27,6 +30,9 @@ namespace SnakeWpf.ViewModels
             GameConfig.SnakeSpeed = 40;
             GameConfig.FoodAppearTime = 3;
             GameConfig.LifeNumber = 3;
+
+            this.StartGame = new StartGameCommand(this);
+
         }
     }
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SnakeWpf.ViewModels.Base;
+using SnakeWpf.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +11,15 @@ namespace SnakeWpf.ViewModels.ICommands
 {
     public class StartGameCommand : ICommand
     {
+        private GameConfigViewModel gameconfigviewmodel;
+
         public event EventHandler CanExecuteChanged;
+
+
+        public StartGameCommand(GameConfigViewModel obj)
+        {
+            this.gameconfigviewmodel = obj;
+        }
 
         public bool CanExecute(object parameter)
         {
@@ -18,8 +28,8 @@ namespace SnakeWpf.ViewModels.ICommands
 
         public void Execute(object sender)
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
+            //GamePage gamepage = new GamePage();
+            gameconfigviewmodel.Navigate<GamePage>();
         }
     }
 }
