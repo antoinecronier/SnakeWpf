@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +22,7 @@ namespace SnakeWpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const int PLAY_TIME_DEFAULT = 1000;
         private Snake snake;
 
         public MainWindow()
@@ -31,21 +33,72 @@ namespace SnakeWpf
             Keyboard.KeyDownEvent, new KeyEventHandler(KeyDown), true);
         }
 
+        CancellationTokenSource cTs = new CancellationTokenSource();
+
         private void KeyDown(object sender, KeyEventArgs e)
         {
+            cTs.Cancel();
             switch (e.Key)
             {
                 case Key.Up:
-                    snake.MoveUp();
+                    cTs = new CancellationTokenSource();
+                    Task.Factory.StartNew(() =>
+                    {
+                        while (true)
+                        {
+                            if (cTs.IsCancellationRequested)
+                            {
+                                cTs.Token.ThrowIfCancellationRequested();
+                            }
+                            snake.MoveUp();
+                            Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
+                        }
+                    },cTs.Token);
                     break;
                 case Key.Right:
-                    snake.MoveRight();
+                    cTs = new CancellationTokenSource();
+                    Task.Factory.StartNew(() =>
+                    {
+                        while (true)
+                        {
+                            if (cTs.IsCancellationRequested)
+                            {
+                                cTs.Token.ThrowIfCancellationRequested();
+                            }
+                            snake.MoveRight();
+                            Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
+                        }
+                    }, cTs.Token);
                     break;
                 case Key.Left:
-                    snake.MoveLeft();
+                    cTs = new CancellationTokenSource();
+                    Task.Factory.StartNew(() =>
+                    {
+                        while (true)
+                        {
+                            if (cTs.IsCancellationRequested)
+                            {
+                                cTs.Token.ThrowIfCancellationRequested();
+                            }
+                            snake.MoveLeft();
+                            Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
+                        }
+                    }, cTs.Token);
                     break;
                 case Key.Down:
-                    snake.MoveDown();
+                    cTs = new CancellationTokenSource();
+                    Task.Factory.StartNew(() =>
+                    {
+                        while (true)
+                        {
+                            if (cTs.IsCancellationRequested)
+                            {
+                                cTs.Token.ThrowIfCancellationRequested();
+                            }
+                            snake.MoveDown();
+                            Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
+                        }
+                    }, cTs.Token);
                     break;
                 default:
                     break;

@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace SnakeWpf.UserControls
 {
@@ -25,7 +28,11 @@ namespace SnakeWpf.UserControls
                 SnakeTileUC uc = new SnakeTileUC(this.mainGrid);
                 uc.MoveTo(baseTile.Row + i, baseTile.Column);
                 this.Tiles.Add(uc);
-                this.mainGrid.Children.Add(uc);
+
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Send, new ThreadStart(delegate
+                {
+                    this.mainGrid.Children.Add(uc);
+                }));
             }
 
             this.Tiles.Add(baseTile);
@@ -91,13 +98,13 @@ namespace SnakeWpf.UserControls
             {
                 SnakeTileUC currentUc = this.Tiles.ElementAt(i);
 
-                int nextRow = lastRow;
-                int nextColumn = lastColumn;
+                int nextRow = currentUc.Row;
+                int nextColumn = currentUc.Column;
 
                 currentUc.MoveTo(lastRow, lastColumn);
 
-                lastRow = currentUc.Row;
-                lastColumn = currentUc.Column;
+                lastRow = nextRow;
+                lastColumn = nextColumn;
             }
         }
     }
