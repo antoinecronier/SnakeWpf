@@ -1,4 +1,5 @@
 ﻿using SnakeWpf.Views.Base;
+using SnakeWpfClassLibrary.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,11 @@ namespace SnakeWpf.ViewModels.Base
         {
             currentPage.GetWindow().Content = new T();
         }
+
+        public void Navigate<T>(GameConfig obj ) where T : BasePage, new()
+        {
+            currentPage.GetWindow().Content = new T();
+        }
+
     }
 }

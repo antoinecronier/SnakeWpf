@@ -1,6 +1,7 @@
 ﻿using SnakeWpf.UserControls;
 using SnakeWpf.ViewModels;
 using SnakeWpf.Views.Base;
+using SnakeWpfClassLibrary.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,11 @@ namespace SnakeWpf.Views
             EventManager.RegisterClassHandler(typeof(Window),
             Keyboard.KeyDownEvent, new KeyEventHandler(vm.KeyDown), true);
             Task.Factory.StartNew(vm.gameTimer);
+        }
+
+        public GamePage(GameConfig obj) : this()
+        {
+            this.vm.gameconfig = obj;
         }
 
         private void GamePage_Loaded(object sender, RoutedEventArgs e)
