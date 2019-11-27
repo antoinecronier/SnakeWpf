@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SnakeWpf.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,11 @@ namespace SnakeWpf.ViewModels.ICommands
     {
         public event EventHandler CanExecuteChanged;
 
+        public StartGameCommand()
+        {
+            Console.WriteLine("StartGameCommand");
+        }
+
         public bool CanExecute(object parameter)
         {
             return true;
@@ -18,8 +24,8 @@ namespace SnakeWpf.ViewModels.ICommands
 
         public void Execute(object sender)
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
+            //GamePage gamepage = new GamePage();
+            Console.WriteLine("StartGameCommand");
         }
     }
 }

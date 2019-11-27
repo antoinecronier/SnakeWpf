@@ -35,8 +35,8 @@
         <Label Grid.Row="3" Grid.Column="0">Food Appear time (in s) : </Label>
         <TextBox x:Name="txtBFoodAppearTime" Grid.Row="3" Grid.Column="1" Text="{Binding GameConfig.FoodAppearTime}"></TextBox>
 
-        <Label Grid.Row="3" Grid.Column="0">Number of life : </Label>
-        <TextBox x:Name="txtBLifeNumber" Grid.Row="3" Grid.Column="1" Text="{Binding GameConfig.LifeNumber}"></TextBox>
+        <Label Grid.Row="4" Grid.Column="0">Number of life : </Label>
+        <TextBox x:Name="txtBLifeNumber" Grid.Row="4" Grid.Column="1" Text="{Binding GameConfig.LifeNumber}"></TextBox>
 
         <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding StartGameCommand}">Let's play a game !</Button>
 
