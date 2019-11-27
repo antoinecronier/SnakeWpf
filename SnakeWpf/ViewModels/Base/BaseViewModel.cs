@@ -19,7 +19,9 @@ namespace SnakeWpf.ViewModels.Base
 
         public void Navigate<T>(GameConfig obj ) where T : BasePage, new()
         {
-            currentPage.GetWindow().Content = new T();
+            T page = new T();
+            currentPage.GetWindow().Content = page;
+            page.Obj = obj;
         }
 
     }

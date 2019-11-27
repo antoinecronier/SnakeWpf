@@ -29,12 +29,7 @@ namespace SnakeWpf.Views
         public GamePage()
         {
             InitializeComponent();
-            vm = new GameViewModel(this);
-            this.DataContext = vm;
             this.Loaded += GamePage_Loaded;
-            EventManager.RegisterClassHandler(typeof(Window),
-            Keyboard.KeyDownEvent, new KeyEventHandler(vm.KeyDown), true);
-            Task.Factory.StartNew(vm.gameTimer);
         }
 
         public GamePage(GameConfig obj) : this()
@@ -44,6 +39,12 @@ namespace SnakeWpf.Views
 
         private void GamePage_Loaded(object sender, RoutedEventArgs e)
         {
+            vm = new GameViewModel(this,this.Obj as GameConfig);
+            this.DataContext = vm;
+            EventManager.RegisterClassHandler(typeof(Window),
+            Keyboard.KeyDownEvent, new KeyEventHandler(vm.KeyDown), true);
+            Task.Factory.StartNew(vm.gameTimer);
+
             this.MainGrid.Background = new SolidColorBrush(Color.FromArgb(50, 100, 150, 100));
             for (int i = 0; i < 16; i++)
             {

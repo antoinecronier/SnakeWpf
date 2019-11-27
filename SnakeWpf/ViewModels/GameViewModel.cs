@@ -25,11 +25,11 @@ namespace SnakeWpf.ViewModels
         public Snake snake;
         CancellationTokenSource cTs = new CancellationTokenSource();
 
-        public GameViewModel(GamePage gamepage)
+        public GameViewModel(GamePage gamepage, GameConfig gameConfig)
         {
             this.currentPage = gamepage;
+            this.gameconfig = gameConfig;
         }
-
 
         private static AutoResetEvent gamerTimerReseter = new AutoResetEvent(false);
         public Action gameTimer = () =>

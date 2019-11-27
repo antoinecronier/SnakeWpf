@@ -10,6 +10,8 @@ namespace SnakeWpf.Views.Base
 {
     public abstract class BasePage : Page
     {
+        public object Obj { get; set; }
+
         public BasePage()
         {
             this.Loaded += BasePage_Loaded;
