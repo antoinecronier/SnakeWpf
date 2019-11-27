@@ -1,19 +1,27 @@
 ﻿using SnakeWpf.UserControls;
 using SnakeWpf.ViewModels.Base;
 using SnakeWpf.Views;
+using SnakeWpfClassLibrary.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace SnakeWpf.ViewModels
 {
     public class GameViewModel : BaseViewModel<GamePage>
     {
         private const int PLAY_TIME_DEFAULT = 1000;
+
+        private int NbofHits = 0;
+
+        public GameConfig gameconfig;
+
         public Snake snake;
         CancellationTokenSource cTs = new CancellationTokenSource();
 
@@ -112,7 +120,17 @@ namespace SnakeWpf.ViewModels
 
         public void Snake_SnakeDeath(object sender, EventArgs e)
         {
-            Console.WriteLine("SnakeDeath " + DateTime.Now);
+            NbofHits = NbofHits + 1;
+
+            if (NbofHits == gameconfig.LifeNumber)
+            {
+                MessageBox.Show("GAME OVER LOOSER !");
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Send, new ThreadStart(delegate
+                {
+                    Navigate<GameConfigPage>();
+                }));
+            }
+               
         }
 
 

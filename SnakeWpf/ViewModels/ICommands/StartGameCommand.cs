@@ -1,5 +1,6 @@
 ﻿using SnakeWpf.ViewModels.Base;
 using SnakeWpf.Views;
+using SnakeWpfClassLibrary.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace SnakeWpf.ViewModels.ICommands
         public void Execute(object sender)
         {
             //GamePage gamepage = new GamePage();
-            gameconfigviewmodel.Navigate<GamePage>();
+            gameconfigviewmodel.Navigate<GamePage>(gameconfigviewmodel.GameConfig);
         }
     }
 }
