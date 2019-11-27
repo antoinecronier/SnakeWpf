@@ -22,6 +22,8 @@ namespace SnakeWpf.UserControls
     {
         public int Row { get; set; }
         public int Column { get; set; }
+        //public int PreviousRow { get; set; }
+        //public int PreviousColumn { get; set; }
         public Grid Container { get; set; }
 
         public SnakeTileUC()

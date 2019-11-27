@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UserControls\Snake.cs" />
     <Compile Include="UserControls\SnakeTileUC.xaml.cs">
       <DependentUpon>SnakeTileUC.xaml</DependentUpon>
     </Compile>
@@ -100,6 +101,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SnakeWpfClassLibrary\SnakeWpfClassLibrary.csproj">
+      <Project>{9a35b4f7-b353-4618-bba0-16e5970ea7f5}</Project>
+      <Name>SnakeWpfClassLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

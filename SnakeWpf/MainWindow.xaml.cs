@@ -21,7 +21,7 @@ namespace SnakeWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        private SnakeTileUC tile;
+        private Snake snake;
 
         public MainWindow()
         {
@@ -36,23 +36,21 @@ namespace SnakeWpf
             switch (e.Key)
             {
                 case Key.Up:
-                    tile.MoveUp();
+                    snake.MoveUp();
                     break;
                 case Key.Right:
-                    tile.MoveRight();
+                    snake.MoveRight();
                     break;
                 case Key.Left:
-                    tile.MoveLeft();
+                    snake.MoveLeft();
                     break;
                 case Key.Down:
-                    tile.MoveDown();
+                    snake.MoveDown();
                     break;
                 default:
                     break;
             }
         }
-
-        
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -67,10 +65,7 @@ namespace SnakeWpf
                 this.MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            tile = new SnakeTileUC(this.MainGrid);
-            tile.MoveTo(this.MainGrid.RowDefinitions.Count / 2, this.MainGrid.ColumnDefinitions.Count / 2);
-            
-            this.MainGrid.Children.Add(tile);
+            snake = new Snake(this.MainGrid);
         }
     }
 }
