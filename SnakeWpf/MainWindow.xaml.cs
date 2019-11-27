@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SnakeWpf
 {
@@ -22,11 +23,16 @@ namespace SnakeWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const int PLAY_TIME_DEFAULT = 1000;
+        private const int PLAY_TIME_DEFAULT = 300;
         private const int SQUARE_SIZE = 20;
+        private const int MAP_HEIGHT = 10;
+        private const int MAP_WIDTH = 20;
+        private const int FOOD_GENERATION_MAX = 15 * PLAY_TIME_DEFAULT;
+        private const int FOOD_GENERATION_MIN = 5 * PLAY_TIME_DEFAULT;
         private Snake snake;
 
         private static AutoResetEvent gamerTimerReseter = new AutoResetEvent(false);
+
         private Action gameTimer = () =>
         {
             while (true)
@@ -35,6 +41,33 @@ namespace SnakeWpf
                 gamerTimerReseter.Set();
             }
         };
+
+        private Action foodGenerator(Grid mainGrid)
+        {
+            Random rand = new Random();
+            while (true)
+            {
+                Task.Delay(TimeSpan.FromMilliseconds(rand.Next(FOOD_GENERATION_MIN,FOOD_GENERATION_MAX))).Wait();
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Send, new ThreadStart(delegate
+                {
+                    List<UIElement> elements = null;
+                    int row;
+                    int column;
+                    do
+                    {
+                        row = rand.Next(mainGrid.RowDefinitions.Count);
+                        column = rand.Next(mainGrid.ColumnDefinitions.Count);
+
+                        elements = mainGrid.Children.OfType<UIElement>().
+                        Where(e => Grid.GetRow(e) == row
+                            && Grid.GetColumn(e) == column).ToList();
+                    } while (elements.Count != 0);
+                    
+                    FoodTileUC food = new FoodTileUC(mainGrid);
+                    food.AddToContainer(row, column);
+                }));
+            }
+        }
 
         public MainWindow()
         {
@@ -53,11 +86,11 @@ namespace SnakeWpf
             {
                 if (gamerTimerReseter.WaitOne(PLAY_TIME_DEFAULT))
                 {
-                    gamerTimerReseter.Reset();
-                    cTs.Cancel();
                     switch (e.Key)
                     {
                         case Key.Up:
+                            gamerTimerReseter.Reset();
+                            cTs.Cancel();
                             cTs = new CancellationTokenSource();
                             Task.Factory.StartNew(() =>
                             {
@@ -74,6 +107,8 @@ namespace SnakeWpf
                             }, cTs.Token);
                             break;
                         case Key.Right:
+                            gamerTimerReseter.Reset();
+                            cTs.Cancel();
                             cTs = new CancellationTokenSource();
                             Task.Factory.StartNew(() =>
                             {
@@ -90,6 +125,8 @@ namespace SnakeWpf
                             }, cTs.Token);
                             break;
                         case Key.Left:
+                            gamerTimerReseter.Reset();
+                            cTs.Cancel();
                             cTs = new CancellationTokenSource();
                             Task.Factory.StartNew(() =>
                             {
@@ -106,6 +143,8 @@ namespace SnakeWpf
                             }, cTs.Token);
                             break;
                         case Key.Down:
+                            gamerTimerReseter.Reset();
+                            cTs.Cancel();
                             cTs = new CancellationTokenSource();
                             Task.Factory.StartNew(() =>
                             {
@@ -123,7 +162,6 @@ namespace SnakeWpf
                             break;
                         default:
                             break;
-
                     }
                 }
             });
@@ -132,13 +170,13 @@ namespace SnakeWpf
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.MainGrid.Background = new SolidColorBrush(Color.FromArgb(50, 100, 150, 100));
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < MAP_HEIGHT; i++)
             {
                 RowDefinition row = new RowDefinition();
                 this.MainGrid.RowDefinitions.Add(row);
             }
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < MAP_WIDTH; i++)
             {
                 ColumnDefinition column = new ColumnDefinition();
                 this.MainGrid.ColumnDefinitions.Add(column);
@@ -147,23 +185,26 @@ namespace SnakeWpf
             snake = new Snake(this.MainGrid);
             snake.SnakeDeath += Snake_SnakeDeath;
 
-            FoodTileUC food1 = new FoodTileUC(this.MainGrid);
-            food1.AddToContainer(1, 1);
-            FoodTileUC food2 = new FoodTileUC(this.MainGrid);
-            food2.AddToContainer(14, 14);
-            FoodTileUC food3 = new FoodTileUC(this.MainGrid);
-            food3.AddToContainer(1, 14);
-            FoodTileUC food4 = new FoodTileUC(this.MainGrid);
-            food4.AddToContainer(14, 1);
+            //FoodTileUC food1 = new FoodTileUC(this.MainGrid);
+            //food1.AddToContainer(1, 1);
+            //FoodTileUC food2 = new FoodTileUC(this.MainGrid);
+            //food2.AddToContainer(14, 14);
+            //FoodTileUC food3 = new FoodTileUC(this.MainGrid);
+            //food3.AddToContainer(1, 14);
+            //FoodTileUC food4 = new FoodTileUC(this.MainGrid);
+            //food4.AddToContainer(14, 1);
 
-            FoodTileUC food5 = new FoodTileUC(this.MainGrid);
-            food5.AddToContainer(5, 5);
-            FoodTileUC food6 = new FoodTileUC(this.MainGrid);
-            food6.AddToContainer(10, 10);
-            FoodTileUC food7 = new FoodTileUC(this.MainGrid);
-            food7.AddToContainer(5, 10);
-            FoodTileUC food8 = new FoodTileUC(this.MainGrid);
-            food8.AddToContainer(10, 5);
+            //FoodTileUC food5 = new FoodTileUC(this.MainGrid);
+            //food5.AddToContainer(5, 5);
+            //FoodTileUC food6 = new FoodTileUC(this.MainGrid);
+            //food6.AddToContainer(10, 10);
+            //FoodTileUC food7 = new FoodTileUC(this.MainGrid);
+            //food7.AddToContainer(5, 10);
+            //FoodTileUC food8 = new FoodTileUC(this.MainGrid);
+            //food8.AddToContainer(10, 5);
+            Task.Factory.StartNew(()=> {
+                foodGenerator(this.MainGrid);
+            });
         }
 
         private void Snake_SnakeDeath(object sender, EventArgs e)
