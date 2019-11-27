@@ -55,6 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UserControls\Base\TileUC.cs" />
+    <Compile Include="UserControls\FoodTileUC.xaml.cs">
+      <DependentUpon>FoodTileUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Snake.cs" />
     <Compile Include="UserControls\SnakeTileUC.xaml.cs">
       <DependentUpon>SnakeTileUC.xaml</DependentUpon>
@@ -71,6 +75,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\FoodTileUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\SnakeTileUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

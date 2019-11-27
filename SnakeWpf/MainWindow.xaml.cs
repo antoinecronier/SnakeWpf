@@ -23,6 +23,7 @@ namespace SnakeWpf
     public partial class MainWindow : Window
     {
         private const int PLAY_TIME_DEFAULT = 1000;
+        private const int SQUARE_SIZE = 20;
         private Snake snake;
 
         private static AutoResetEvent gamerTimerReseter = new AutoResetEvent(false);
@@ -64,7 +65,8 @@ namespace SnakeWpf
                                 {
                                     if (cTs.IsCancellationRequested)
                                     {
-                                        cTs.Token.ThrowIfCancellationRequested();
+                                        //cTs.Token.ThrowIfCancellationRequested();
+                                        return;
                                     }
                                     snake.MoveUp();
                                     Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
@@ -79,7 +81,8 @@ namespace SnakeWpf
                                 {
                                     if (cTs.IsCancellationRequested)
                                     {
-                                        cTs.Token.ThrowIfCancellationRequested();
+                                        //cTs.Token.ThrowIfCancellationRequested();
+                                        return;
                                     }
                                     snake.MoveRight();
                                     Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
@@ -94,7 +97,8 @@ namespace SnakeWpf
                                 {
                                     if (cTs.IsCancellationRequested)
                                     {
-                                        cTs.Token.ThrowIfCancellationRequested();
+                                        //cTs.Token.ThrowIfCancellationRequested();
+                                        return;
                                     }
                                     snake.MoveLeft();
                                     Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
@@ -109,7 +113,8 @@ namespace SnakeWpf
                                 {
                                     if (cTs.IsCancellationRequested)
                                     {
-                                        cTs.Token.ThrowIfCancellationRequested();
+                                        //cTs.Token.ThrowIfCancellationRequested();
+                                        return;
                                     }
                                     snake.MoveDown();
                                     Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
@@ -129,16 +134,36 @@ namespace SnakeWpf
             this.MainGrid.Background = new SolidColorBrush(Color.FromArgb(50, 100, 150, 100));
             for (int i = 0; i < 16; i++)
             {
-                this.MainGrid.RowDefinitions.Add(new RowDefinition());
+                RowDefinition row = new RowDefinition();
+                this.MainGrid.RowDefinitions.Add(row);
             }
 
             for (int i = 0; i < 16; i++)
             {
-                this.MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                ColumnDefinition column = new ColumnDefinition();
+                this.MainGrid.ColumnDefinitions.Add(column);
             }
 
             snake = new Snake(this.MainGrid);
             snake.SnakeDeath += Snake_SnakeDeath;
+
+            FoodTileUC food1 = new FoodTileUC(this.MainGrid);
+            food1.AddToContainer(1, 1);
+            FoodTileUC food2 = new FoodTileUC(this.MainGrid);
+            food2.AddToContainer(14, 14);
+            FoodTileUC food3 = new FoodTileUC(this.MainGrid);
+            food3.AddToContainer(1, 14);
+            FoodTileUC food4 = new FoodTileUC(this.MainGrid);
+            food4.AddToContainer(14, 1);
+
+            FoodTileUC food5 = new FoodTileUC(this.MainGrid);
+            food5.AddToContainer(5, 5);
+            FoodTileUC food6 = new FoodTileUC(this.MainGrid);
+            food6.AddToContainer(10, 10);
+            FoodTileUC food7 = new FoodTileUC(this.MainGrid);
+            food7.AddToContainer(5, 10);
+            FoodTileUC food8 = new FoodTileUC(this.MainGrid);
+            food8.AddToContainer(10, 5);
         }
 
         private void Snake_SnakeDeath(object sender, EventArgs e)

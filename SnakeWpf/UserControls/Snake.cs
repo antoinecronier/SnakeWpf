@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace SnakeWpf.UserControls
@@ -20,9 +21,9 @@ namespace SnakeWpf.UserControls
         {
             this.mainGrid = mainGrid;
             this.Tiles = new List<SnakeTileUC>();
-            SnakeTileUC baseTile = new SnakeTileUC(this.mainGrid);
+            SnakeTileUC baseTile = new SnakeTileUC(this.mainGrid, Color.FromRgb(0, 255, 255), Color.FromRgb(0, 255, 111));
             baseTile.MoveTo(this.mainGrid.RowDefinitions.Count / 2, this.mainGrid.ColumnDefinitions.Count / 2);
-            GenerateMoreTiles(baseTile);
+            //GenerateMoreTiles(baseTile);
 
             this.Tiles.Add(baseTile);
 
@@ -54,6 +55,7 @@ namespace SnakeWpf.UserControls
             lastColumn = firstUc.Column;
 
             firstUc.MoveUp();
+            DidFoundFood(firstUc);
             MoveOthers(lastRow, lastColumn);
         }
 
@@ -67,6 +69,7 @@ namespace SnakeWpf.UserControls
             lastColumn = firstUc.Column;
 
             firstUc.MoveRight();
+            DidFoundFood(firstUc);
             MoveOthers(lastRow, lastColumn);
         }
 
@@ -80,6 +83,7 @@ namespace SnakeWpf.UserControls
             lastColumn = firstUc.Column;
 
             firstUc.MoveLeft();
+            DidFoundFood(firstUc);
             MoveOthers(lastRow, lastColumn);
         }
 
@@ -93,7 +97,35 @@ namespace SnakeWpf.UserControls
             lastColumn = firstUc.Column;
 
             firstUc.MoveDown();
+            DidFoundFood(firstUc);
             MoveOthers(lastRow, lastColumn);
+        }
+
+        private void DidFoundFood(SnakeTileUC snakeHeadTile)
+        {
+            List<UIElement> food = null;
+
+            Task.Factory.StartNew(()=>
+            {
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Send, new ThreadStart(delegate
+                {
+                    food = this.mainGrid.Children.OfType<UIElement>().
+                    Where(e => Grid.GetRow(e) == snakeHeadTile.Row
+                        && Grid.GetColumn(e) == snakeHeadTile.Column).ToList();
+                }));
+            }).ContinueWith((s)=>
+            {
+                if (food != null && food.OfType<FoodTileUC>().Count() > 0)
+                {
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Send, new ThreadStart(delegate
+                    {
+                        SnakeTileUC uc = new SnakeTileUC(this.mainGrid);
+                        uc.AddToContainer(snakeHeadTile.Row, snakeHeadTile.Column);
+                        this.Tiles.Add(uc);
+                        this.mainGrid.Children.Remove(food.OfType<FoodTileUC>().First());
+                    }));
+                }
+            });
         }
 
         private void MoveOthers(int lastRow, int lastColumn)
