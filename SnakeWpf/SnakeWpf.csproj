@@ -57,10 +57,18 @@
     </ApplicationDefinition>
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\GameConfigViewModel.cs" />
+    <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\ICommands\StartGameCommand.cs" />
     <Compile Include="Views\Base\BasePage.cs" />
     <Compile Include="Views\GameConfigPage.xaml.cs">
       <DependentUpon>GameConfigPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Snake.cs" />
+    <Compile Include="UserControls\SnakeTileUC.xaml.cs">
+      <DependentUpon>SnakeTileUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GamePage.xaml.cs">
+      <DependentUpon>GamePage.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -75,6 +83,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\GameConfigPage.xaml">
+    </Page>
+    <Page Include="UserControls\SnakeTileUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GamePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
