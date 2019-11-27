@@ -25,84 +25,103 @@ namespace SnakeWpf
         private const int PLAY_TIME_DEFAULT = 1000;
         private Snake snake;
 
+        private static AutoResetEvent gamerTimerReseter = new AutoResetEvent(false);
+        private Action gameTimer = () =>
+        {
+            while (true)
+            {
+                Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait();
+                gamerTimerReseter.Set();
+            }
+        };
+
         public MainWindow()
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
             EventManager.RegisterClassHandler(typeof(Window),
             Keyboard.KeyDownEvent, new KeyEventHandler(KeyDown), true);
+            Task.Factory.StartNew(gameTimer);
         }
 
         CancellationTokenSource cTs = new CancellationTokenSource();
 
         private void KeyDown(object sender, KeyEventArgs e)
         {
-            cTs.Cancel();
-            switch (e.Key)
+            Task.Factory.StartNew(() =>
             {
-                case Key.Up:
-                    cTs = new CancellationTokenSource();
-                    Task.Factory.StartNew(() =>
+                if (gamerTimerReseter.WaitOne(PLAY_TIME_DEFAULT))
+                {
+                    gamerTimerReseter.Reset();
+                    cTs.Cancel();
+                    switch (e.Key)
                     {
-                        while (true)
-                        {
-                            if (cTs.IsCancellationRequested)
+                        case Key.Up:
+                            cTs = new CancellationTokenSource();
+                            Task.Factory.StartNew(() =>
                             {
-                                cTs.Token.ThrowIfCancellationRequested();
-                            }
-                            snake.MoveUp();
-                            Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
-                        }
-                    },cTs.Token);
-                    break;
-                case Key.Right:
-                    cTs = new CancellationTokenSource();
-                    Task.Factory.StartNew(() =>
-                    {
-                        while (true)
-                        {
-                            if (cTs.IsCancellationRequested)
+                                while (true)
+                                {
+                                    if (cTs.IsCancellationRequested)
+                                    {
+                                        cTs.Token.ThrowIfCancellationRequested();
+                                    }
+                                    snake.MoveUp();
+                                    Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
+                                }
+                            }, cTs.Token);
+                            break;
+                        case Key.Right:
+                            cTs = new CancellationTokenSource();
+                            Task.Factory.StartNew(() =>
                             {
-                                cTs.Token.ThrowIfCancellationRequested();
-                            }
-                            snake.MoveRight();
-                            Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
-                        }
-                    }, cTs.Token);
-                    break;
-                case Key.Left:
-                    cTs = new CancellationTokenSource();
-                    Task.Factory.StartNew(() =>
-                    {
-                        while (true)
-                        {
-                            if (cTs.IsCancellationRequested)
+                                while (true)
+                                {
+                                    if (cTs.IsCancellationRequested)
+                                    {
+                                        cTs.Token.ThrowIfCancellationRequested();
+                                    }
+                                    snake.MoveRight();
+                                    Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
+                                }
+                            }, cTs.Token);
+                            break;
+                        case Key.Left:
+                            cTs = new CancellationTokenSource();
+                            Task.Factory.StartNew(() =>
                             {
-                                cTs.Token.ThrowIfCancellationRequested();
-                            }
-                            snake.MoveLeft();
-                            Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
-                        }
-                    }, cTs.Token);
-                    break;
-                case Key.Down:
-                    cTs = new CancellationTokenSource();
-                    Task.Factory.StartNew(() =>
-                    {
-                        while (true)
-                        {
-                            if (cTs.IsCancellationRequested)
+                                while (true)
+                                {
+                                    if (cTs.IsCancellationRequested)
+                                    {
+                                        cTs.Token.ThrowIfCancellationRequested();
+                                    }
+                                    snake.MoveLeft();
+                                    Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
+                                }
+                            }, cTs.Token);
+                            break;
+                        case Key.Down:
+                            cTs = new CancellationTokenSource();
+                            Task.Factory.StartNew(() =>
                             {
-                                cTs.Token.ThrowIfCancellationRequested();
-                            }
-                            snake.MoveDown();
-                            Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
-                        }
-                    }, cTs.Token);
-                    break;
-                default:
-                    break;
-            }
+                                while (true)
+                                {
+                                    if (cTs.IsCancellationRequested)
+                                    {
+                                        cTs.Token.ThrowIfCancellationRequested();
+                                    }
+                                    snake.MoveDown();
+                                    Task.Delay(TimeSpan.FromMilliseconds(PLAY_TIME_DEFAULT)).Wait(cTs.Token);
+                                }
+                            }, cTs.Token);
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
+            });
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
