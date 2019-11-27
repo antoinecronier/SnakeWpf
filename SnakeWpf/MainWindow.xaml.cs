@@ -185,23 +185,6 @@ namespace SnakeWpf
             snake = new Snake(this.MainGrid);
             snake.SnakeDeath += Snake_SnakeDeath;
 
-            //FoodTileUC food1 = new FoodTileUC(this.MainGrid);
-            //food1.AddToContainer(1, 1);
-            //FoodTileUC food2 = new FoodTileUC(this.MainGrid);
-            //food2.AddToContainer(14, 14);
-            //FoodTileUC food3 = new FoodTileUC(this.MainGrid);
-            //food3.AddToContainer(1, 14);
-            //FoodTileUC food4 = new FoodTileUC(this.MainGrid);
-            //food4.AddToContainer(14, 1);
-
-            //FoodTileUC food5 = new FoodTileUC(this.MainGrid);
-            //food5.AddToContainer(5, 5);
-            //FoodTileUC food6 = new FoodTileUC(this.MainGrid);
-            //food6.AddToContainer(10, 10);
-            //FoodTileUC food7 = new FoodTileUC(this.MainGrid);
-            //food7.AddToContainer(5, 10);
-            //FoodTileUC food8 = new FoodTileUC(this.MainGrid);
-            //food8.AddToContainer(10, 5);
             Task.Factory.StartNew(()=> {
                 foodGenerator(this.MainGrid);
             });
