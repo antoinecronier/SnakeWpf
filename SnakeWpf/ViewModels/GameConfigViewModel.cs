@@ -31,7 +31,7 @@ namespace SnakeWpf.ViewModels
             GameConfig.FoodAppearTime = 3;
             GameConfig.LifeNumber = 3;
 
-            this.StartGame = new StartGameCommand();
+            this.StartGame = new StartGameCommand(this);
 
         }
     }
