@@ -22,7 +22,15 @@ namespace SnakeWpf.UserControls
             this.Tiles = new List<SnakeTileUC>();
             SnakeTileUC baseTile = new SnakeTileUC(this.mainGrid);
             baseTile.MoveTo(this.mainGrid.RowDefinitions.Count / 2, this.mainGrid.ColumnDefinitions.Count / 2);
+            GenerateMoreTiles(baseTile);
 
+            this.Tiles.Add(baseTile);
+
+            this.mainGrid.Children.Add(baseTile);
+        }
+
+        private void GenerateMoreTiles(SnakeTileUC baseTile)
+        {
             for (int i = 1; i < 7; i++)
             {
                 SnakeTileUC uc = new SnakeTileUC(this.mainGrid);
@@ -34,10 +42,6 @@ namespace SnakeWpf.UserControls
                     this.mainGrid.Children.Add(uc);
                 }));
             }
-
-            this.Tiles.Add(baseTile);
-
-            this.mainGrid.Children.Add(baseTile);
         }
 
         public void MoveUp()
